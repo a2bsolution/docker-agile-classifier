@@ -10,7 +10,7 @@
 services:
   web-dev:
     platform: linux/amd64
-    image: aicargomation.azurecr.io/agile-classifier-web:${AGILE_CLASSIFIER_TAG}
+    image: aicargomation.azurecr.io/agile-classifier-web:${AGILE_CLASSIFIER_TAG:-dev60-i2}
     command: gunicorn --bind=0.0.0.0:5000 --timeout 500 'app:create_app()'
     expose:
       - 5000
@@ -23,7 +23,7 @@ services:
 
   celery:
     platform: linux/amd64
-    image: aicargomation.azurecr.io/agile-classifier-web:${AGILE_CLASSIFIER_TAG}
+    image: aicargomation.azurecr.io/agile-classifier-web:${AGILE_CLASSIFIER_TAG:-dev60-i2}
     command: celery -A celery_worker worker --loglevel=info
     env_file:
       - .env.dev
@@ -40,7 +40,7 @@ services:
     platform: linux/amd64
     build: nginx
     ports:
-      - 5005:80
+      - 5025:80
     depends_on:
       - web-dev
     mem_limit: 512M
